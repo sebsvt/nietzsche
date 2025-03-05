@@ -31,6 +31,10 @@ func CreateFile(path string) error {
 	return nil
 }
 
+func WriteFile(path string, content []byte) error {
+	return os.WriteFile(path, content, 0644)
+}
+
 func DeleteFile(path string) error {
 	return os.Remove(path)
 }

@@ -71,7 +71,7 @@ func TestCrop(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		_, err := Crop(tc.params)
+		err := Crop(tc.params)
 		if err != tc.expectedErr {
 			t.Errorf("expected error: %v, got: %v", tc.expectedErr, err)
 		}

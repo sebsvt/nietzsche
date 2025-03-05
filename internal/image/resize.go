@@ -20,20 +20,20 @@ type ResizeParameters struct {
 }
 
 // return file path and error
-func Resize(params *ResizeParameters) (string, error) {
+func Resize(params *ResizeParameters) error {
 	var image *image.NRGBA
 
 	img, err := file.ReadFile(params.InPath)
 	if err != nil {
-		return "", ErrCouldNotReadFile
+		return ErrCouldNotReadFile
 	}
 	_image, err := imaging.Decode(bytes.NewReader(img.Content))
 	if err != nil {
-		return "", ErrCouldNotDecodeFile
+		return ErrCouldNotDecodeFile
 	}
 	// validate parameters
 	if err := validateResizeParameters(params); err != nil {
-		return "", err
+		return err
 	}
 
 	switch params.ResizeMode {
@@ -51,17 +51,16 @@ func Resize(params *ResizeParameters) (string, error) {
 		image = imaging.Resize(_image, params.PixelWidth, params.PixelHeight, imaging.CatmullRom)
 
 	default:
-		return "", ErrInvalidResizeMode
+		return ErrInvalidResizeMode
 	}
 
 	// save image
 	err = imaging.Save(image, params.OutPath)
 	if err != nil {
-		return "", ErrCouldNotSaveFile
+		return ErrCouldNotSaveFile
 	}
 
-	// return params.OutPath, nil
-	return "", nil
+	return nil
 }
 
 func validateResizeParameters(params *ResizeParameters) error {

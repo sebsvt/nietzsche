@@ -2,6 +2,8 @@ package image
 
 import (
 	"testing"
+
+	"github.com/sebsvt/nietzsche/pkg/file"
 )
 
 func TestCompress(t *testing.T) {
@@ -52,7 +54,7 @@ func TestCompress(t *testing.T) {
 
 	for _, testcase := range testcases {
 		t.Run(testcase.name, func(t *testing.T) {
-			_, err := Compress(&CompressParameters{
+			err := Compress(&CompressParameters{
 				InPath:           testcase.inPath,
 				OutPath:          testcase.outPath,
 				CompressionLevel: testcase.compressionLevel,
@@ -60,6 +62,7 @@ func TestCompress(t *testing.T) {
 			if err != testcase.expectedError {
 				t.Errorf("expected error %v, got %v", testcase.expectedError, err)
 			}
+			defer file.DeleteFile(testcase.outPath)
 		})
 
 	}

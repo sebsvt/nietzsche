@@ -16,5 +16,7 @@ var (
 	ErrCoordinatesInvalid      = fmt.Errorf("coordinates must be greater than 0")
 	ErrInvalidCompressionLevel = fmt.Errorf("invalid compression level")
 	ErrInvalidFormat           = fmt.Errorf("invalid format")
+	ErrInvalidAngle            = fmt.Errorf("invalid angle")
+	ErrInvalidMultiplier       = fmt.Errorf("invalid multiplier")
 	ErrCouldNotCreateFile      = fmt.Errorf("could not create file")
 )

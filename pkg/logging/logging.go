@@ -1,23 +1,42 @@
 package logging
 
-import "log"
+import (
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+)
 
-func Info(message string) {
-	log.Println("🔍 INFO: " + message)
+var log *zap.Logger
+
+func init() {
+	config := zap.NewDevelopmentConfig()
+	config.EncoderConfig.TimeKey = "timestamp"
+	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	config.EncoderConfig.StacktraceKey = ""
+
+	var err error
+	log, err = config.Build(zap.AddCallerSkip(1))
+	if err != nil {
+		panic(err)
+	}
 }
 
-func Done(message string) {
-	log.Println("✅ DONE: " + message)
+func Info(message string, fields ...zap.Field) {
+	log.Info(message, fields...)
 }
 
-func Error(message string) {
-	log.Println("❌ ERROR: " + message)
+func Debug(message string, fields ...zap.Field) {
+	log.Debug(message, fields...)
 }
 
-func Debug(message string) {
-	log.Println("🐛 DEBUG: " + message)
+func Warn(message string, fields ...zap.Field) {
+	log.Warn(message, fields...)
 }
 
-func Warn(message string) {
-	log.Println("⚠️ WARN: " + message)
+func Error(message interface{}, fields ...zap.Field) {
+	switch v := message.(type) {
+	case error:
+		log.Error(v.Error(), fields...)
+	case string:
+		log.Error(v, fields...)
+	}
 }

@@ -13,15 +13,19 @@ type UpscaleParameters struct {
 	Multiplier int
 }
 
-func Upscale(params *UpscaleParameters) (string, error) {
-	// img, err := imaging.Decode(bytes.NewReader(f.Content))
+func Upscale(params *UpscaleParameters) error {
+	// validate multiplier should be 2 or 4
+	if params.Multiplier != 2 && params.Multiplier != 4 {
+		return ErrInvalidMultiplier
+	}
+
 	f, err := file.ReadFile(params.InPath)
 	if err != nil {
-		return "", ErrCouldNotReadFile
+		return ErrCouldNotReadFile
 	}
 	img, err := imaging.Decode(bytes.NewReader(f.Content))
 	if err != nil {
-		return "", ErrCouldNotDecodeFile
+		return ErrCouldNotDecodeFile
 	}
 	// scale image up
 	width := img.Bounds().Dx() * params.Multiplier
@@ -30,8 +34,8 @@ func Upscale(params *UpscaleParameters) (string, error) {
 
 	err = imaging.Save(img, params.OutPath)
 	if err != nil {
-		return "", ErrCouldNotSaveFile
+		return ErrCouldNotSaveFile
 	}
 
-	return params.OutPath, nil
+	return nil
 }

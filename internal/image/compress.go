@@ -23,21 +23,21 @@ type CompressParameters struct {
 	CompressionLevel CompressionLevel
 }
 
-func Compress(params *CompressParameters) (string, error) {
+func Compress(params *CompressParameters) error {
 	var level png.CompressionLevel
 
 	if err := validateCompressionLevel(params.CompressionLevel); err != nil {
-		return "", err
+		return err
 	}
 
 	f, err := file.ReadFile(params.InPath)
 	if err != nil {
-		return "", ErrCouldNotReadFile
+		return ErrCouldNotReadFile
 	}
 
 	img, err := imaging.Decode(bytes.NewReader(f.Content))
 	if err != nil {
-		return "", ErrCouldNotDecodeFile
+		return ErrCouldNotDecodeFile
 	}
 
 	// match the compression level
@@ -52,15 +52,15 @@ func Compress(params *CompressParameters) (string, error) {
 	buff := bytes.NewBuffer(nil)
 	err = imaging.Encode(buff, img, imaging.PNG, imaging.PNGCompressionLevel(level))
 	if err != nil {
-		return "", ErrCouldNotEncodeFile
+		return ErrCouldNotEncodeFile
 	}
 
 	err = os.WriteFile(params.OutPath, buff.Bytes(), 0644)
 	if err != nil {
-		return "", ErrCouldNotSaveFile
+		return ErrCouldNotSaveFile
 	}
 
-	return params.OutPath, nil
+	return nil
 }
 
 func validateCompressionLevel(level CompressionLevel) error {

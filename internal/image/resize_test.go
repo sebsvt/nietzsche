@@ -81,7 +81,7 @@ func TestResize(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		_, err := Resize(testCase.params)
+		err := Resize(testCase.params)
 		if err != testCase.expectedErr {
 			t.Errorf("expected error: %v, got: %v", testCase.expectedErr, err)
 		}

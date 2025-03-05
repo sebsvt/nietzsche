@@ -45,3 +45,10 @@ func TestDeleteDir(t *testing.T) {
 
 	assert.NoError(t, DeleteDir("test"))
 }
+
+func TestWriteFile(t *testing.T) {
+	WriteFile("test.txt", []byte("Hello, World!"))
+	defer DeleteFile("test.txt")
+
+	assert.NoError(t, WriteFile("test.txt", []byte("Hello, World!")))
+}
