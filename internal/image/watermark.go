@@ -111,6 +111,23 @@ func validateInput(params *AddWatermarkParameters) error {
 	if len(params.Elements) == 0 {
 		return fmt.Errorf("no watermark elements provided")
 	}
+	if params.InputPath == "" {
+		return fmt.Errorf("input path not provided")
+	}
+	if params.OutputPath == "" {
+		return fmt.Errorf("output path not provided")
+	}
+	for _, element := range params.Elements {
+		if element.Type == "" {
+			return fmt.Errorf("watermark element type not provided")
+		}
+		if element.Type == "text" && element.Text == "" {
+			return fmt.Errorf("text watermark element text not provided")
+		}
+		if element.Type == "image" && element.Image == "" {
+			return fmt.Errorf("image watermark element image not provided")
+		}
+	}
 
 	return nil
 }
