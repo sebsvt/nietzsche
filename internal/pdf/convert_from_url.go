@@ -2,7 +2,6 @@ package pdf
 
 import (
 	"context"
-	"errors"
 	"os"
 
 	"github.com/chromedp/cdproto/page"
@@ -16,11 +15,11 @@ type ConverterFromURLParams struct {
 
 func ConvertFromURL(params *ConverterFromURLParams) error {
 	if params.OutputPath == "" {
-		return errors.New("output path is required")
+		return ErrOutputFilePathEmpty
 	}
 
 	if params.URL == "" {
-		return errors.New("url is required")
+		return ErrURLRequired
 	}
 	ctx, cancel := chromedp.NewContext(context.Background())
 	defer cancel()
@@ -35,32 +34,12 @@ func ConvertFromURL(params *ConverterFromURLParams) error {
 		}),
 	)
 	if err != nil {
-		return err
+		return ErrFailedToConvertFromURL
 	}
 
 	err = os.WriteFile(params.OutputPath, pdfBuffer, 0644)
 	if err != nil {
-		return err
+		return ErrFailedToWriteFile
 	}
-	return nil
-}
-
-func FromImage(image string) error {
-
-	return nil
-}
-
-func FromMarkdown(markdown string) error {
-
-	return nil
-}
-
-func FromBase64(base64 string) error {
-
-	return nil
-}
-
-func FromPDF(pdf string) error {
-
 	return nil
 }
