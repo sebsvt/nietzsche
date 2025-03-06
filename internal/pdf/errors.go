@@ -1,6 +1,9 @@
 package pdf
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 var (
 	ErrParamsNil              = fmt.Errorf("params are nil")
@@ -24,4 +27,11 @@ var (
 	ErrFailedToRunCommand     = fmt.Errorf("failed to run command")
 	ErrOutputDirEmpty         = fmt.Errorf("output directory is empty")
 	ErrFileNotFound           = fmt.Errorf("file not found")
+	ErrInputFileIsNotPDF      = fmt.Errorf("input file is not a PDF")
+	ErrOutputFileIsNotPDF     = fmt.Errorf("output file is not a PDF")
+	ErrPDFAParamsNil          = errors.New("PDF/A parameters cannot be nil")
+	ErrPDFAInputPathEmpty     = errors.New("PDF/A input file path cannot be empty")
+	ErrPDFAOutputPathEmpty    = errors.New("PDF/A output file path cannot be empty")
+	ErrInvalidPDFAFormat      = errors.New("invalid PDF/A format")
+	ErrFailedToPDFAConvert    = errors.New("failed to convert to PDF/A")
 )
