@@ -2,6 +2,7 @@ package file
 
 import (
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -74,4 +75,15 @@ func ReadFile(path string) (*File, error) {
 		Size:      int64(len(content)),
 		Extension: path[strings.LastIndex(path, ".")+1:],
 	}, nil
+}
+
+// the function to check filename extension is valid from the provided list of extensions
+func IsValidExtension(filename string, extensions []string) bool {
+	ext := filepath.Ext(filename)
+	for _, e := range extensions {
+		if e == ext {
+			return true
+		}
+	}
+	return false
 }

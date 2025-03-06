@@ -1,19 +1,26 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"time"
 
 	"github.com/sebsvt/nietzsche/internal/pdf"
 )
 
 func main() {
-	if err := pdf.FromImage(&pdf.ConverterFromImageParams{
-		InputPath:   "test_assets/meow.jpg",
-		OutputPath:  "test_assets/meow.pdf",
-		Orientation: "Portrait",
-		Margin:      0,
-		PageSize:    "fit",
-	}); err != nil {
+	start := time.Now()
+	// pdf.StartServer()
+
+	err := pdf.FromOffice(&pdf.ConverterFromOfficeParams{
+		InputPath: "test_assets/sample.docx",
+		OutputDir: "test_assets",
+	})
+	if err != nil {
+		elapsed := time.Since(start)
+		fmt.Printf("Time taken: %s\n", elapsed)
 		log.Fatal(err)
 	}
+	elapsed := time.Since(start)
+	fmt.Printf("Time taken: %s\n", elapsed)
 }
