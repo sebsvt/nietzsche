@@ -34,4 +34,7 @@ var (
 	ErrPDFAOutputPathEmpty    = errors.New("PDF/A output file path cannot be empty")
 	ErrInvalidPDFAFormat      = errors.New("invalid PDF/A format")
 	ErrFailedToPDFAConvert    = errors.New("failed to convert to PDF/A")
+	ErrAngleZero              = fmt.Errorf("angle cannot be zero")
+	ErrInvalidAngle           = fmt.Errorf("invalid angle")
+	ErrFailedToRotate         = fmt.Errorf("failed to rotate")
 )
