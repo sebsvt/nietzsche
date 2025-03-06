@@ -1,6 +1,11 @@
 package pdf
 
-import "github.com/pdfcpu/pdfcpu/pkg/api"
+import (
+	"fmt"
+
+	"github.com/pdfcpu/pdfcpu/pkg/api"
+	"github.com/sebsvt/nietzsche/pkg/file"
+)
 
 type RotateParams struct {
 	InputFilePath  string
@@ -26,9 +31,17 @@ func Rotate(params *RotateParams) error {
 		return ErrInvalidAngle
 	}
 
+	if !file.IsValidExtension(params.InputFilePath, []string{".pdf"}) {
+		return ErrInputFileIsNotPDF
+	}
+
+	if !file.FileExists(params.InputFilePath) {
+		return ErrFileNotFound
+	}
+
 	err := api.RotateFile(params.InputFilePath, params.OutputFilePath, params.Angle, nil, nil)
 	if err != nil {
-		return ErrFailedToRotate
+		return fmt.Errorf("%w: %v", ErrFailedToRotate, err)
 	}
 
 	return nil
