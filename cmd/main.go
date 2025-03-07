@@ -7,21 +7,12 @@ import (
 )
 
 func main() {
-	// pdf.StartServer()
-
-	// if err := pdf.FromImage(&pdf.ConverterFromImageParams{
-	// 	Orientation: "Portrait",
-	// 	InputPath:   "test_assets/page_002.pdf",
-	// 	OutputPath:  "test_assets/page_002_ocr_square.pdf",
-	// 	PageSize:    "A4",
-	// }); err != nil {
-	// 	log.Fatal(err)
-	// }
-	if err := pdf.OCRScan(&pdf.OCRScanParams{
-		InputPath:  "test_assets/page_002.pdf",
-		OutputPath: "test_assets/page_002_ocr_square.pdf",
+	if err := pdf.SplitRemove(&pdf.SplitRemoveParams{
+		InputPath:   "test_assets/long_page.pdf",
+		OutputPath:  "test_assets/long_removeds.pdf",
+		RemovePages: "1-3,6",
+		MergeAfter:  false,
 	}); err != nil {
 		log.Fatal(err)
 	}
-
 }
