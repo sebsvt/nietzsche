@@ -45,6 +45,10 @@ func FromPDFToPDFA(params *FromPDFToPDFAParams) error {
 	if _, exists := supportedPDFAFormats[params.Format]; !exists {
 		return ErrInvalidPDFAFormat
 	}
+	// check that gs is installed
+	if _, err := exec.LookPath("gs"); err != nil {
+		return ErrGhostscriptIsNotInstalled
+	}
 
 	// Base arguments for all formats
 	args := []string{

@@ -11,7 +11,6 @@ type ConverterFromOfficeParams struct {
 	OutputDir string
 }
 
-// supported files: word, powerpoint, excel
 var officeFileExtensions = []string{".docx", ".doc", ".pptx", ".ppt", ".xlsx", ".xls"}
 
 func FromOffice(params *ConverterFromOfficeParams) error {
@@ -27,11 +26,13 @@ func FromOffice(params *ConverterFromOfficeParams) error {
 	if !file.IsValidExtension(params.InputPath, officeFileExtensions) {
 		return ErrInvalidOffice
 	}
-	// file must exist
 	if !file.FileExists(params.InputPath) {
 		return ErrFileNotFound
 	}
-
+	// check that soffice is installed
+	if _, err := exec.LookPath("soffice"); err != nil {
+		return ErrSOfficeIsNotInstalled
+	}
 	cmd := exec.Command("soffice", "--convert-to", "pdf", "--outdir", params.OutputDir, params.InputPath)
 	if err := cmd.Run(); err != nil {
 		return ErrFailedToRunCommand

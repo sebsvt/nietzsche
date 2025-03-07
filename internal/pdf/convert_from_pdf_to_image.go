@@ -24,25 +24,25 @@ func ConvertFromPDFToImage(params ConvertFromPDFToImageParams) error {
 	if params.OutputPath == "" {
 		return ErrOutputFilePathEmpty
 	}
-	if !file.FileExists(params.InputPath) {
-		return ErrFileNotFound
-	}
 	if !file.IsValidExtension(params.InputPath, []string{".pdf"}) {
 		return ErrInvalidFileExtension
 	}
 	if !file.IsValidExtension(params.OutputPath, []string{".zip"}) {
 		return ErrInvalidFileExtension
 	}
+	if !file.FileExists(params.InputPath) {
+		return ErrFileNotFound
+	}
 
 	doc, err := fitz.New(params.InputPath)
 	if err != nil {
-		return fmt.Errorf("failed to open PDF: %w", err)
+		return ErrFailedToOpenPDF
 	}
 	defer doc.Close()
 
 	zipFile, err := os.Create(params.OutputPath)
 	if err != nil {
-		return fmt.Errorf("failed to create zip file: %w", err)
+		return ErrFailedToCreateZipFile
 	}
 	defer zipFile.Close()
 
@@ -52,13 +52,13 @@ func ConvertFromPDFToImage(params ConvertFromPDFToImageParams) error {
 	for i := 0; i < doc.NumPage(); i++ {
 		img, err := doc.Image(i)
 		if err != nil {
-			return fmt.Errorf("failed to extract image from page %d: %w", i, err)
+			return ErrFailedToExtractImage
 		}
 
 		filename := fmt.Sprintf("page_%03d.jpg", i+1) // Use consistent naming with padding
 		fileWriter, err := zipWriter.Create(filename)
 		if err != nil {
-			return fmt.Errorf("failed to create file in zip: %w", err)
+			return ErrFailedToCreateFileInZip
 		}
 
 		pr, pw := io.Pipe()
@@ -72,12 +72,12 @@ func ConvertFromPDFToImage(params ConvertFromPDFToImageParams) error {
 		// Copy data from pipe to zip file
 		_, err = io.Copy(fileWriter, pr)
 		if err != nil {
-			return fmt.Errorf("failed to write image data to zip: %w", err)
+			return ErrFailedToWriteImageData
 		}
 
 		// Check if encoding had an error
 		if err := <-encodeErrCh; err != nil {
-			return fmt.Errorf("failed to encode image: %w", err)
+			return ErrFailedToEncodeImage
 		}
 	}
 

@@ -9,9 +9,17 @@ import (
 func main() {
 	// pdf.StartServer()
 
-	if err := pdf.ConvertFromPDFToImage(pdf.ConvertFromPDFToImageParams{
-		InputPath:  "test_assets/aero.pdf",
-		OutputPath: "test_assets/aero.zip",
+	// if err := pdf.FromImage(&pdf.ConverterFromImageParams{
+	// 	Orientation: "Portrait",
+	// 	InputPath:   "test_assets/page_002.pdf",
+	// 	OutputPath:  "test_assets/page_002_ocr_square.pdf",
+	// 	PageSize:    "A4",
+	// }); err != nil {
+	// 	log.Fatal(err)
+	// }
+	if err := pdf.OCRScan(&pdf.OCRScanParams{
+		InputPath:  "test_assets/page_002.pdf",
+		OutputPath: "test_assets/page_002_ocr_square.pdf",
 	}); err != nil {
 		log.Fatal(err)
 	}
