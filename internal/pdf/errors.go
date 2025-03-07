@@ -38,4 +38,5 @@ var (
 	ErrInvalidAngle           = fmt.Errorf("invalid angle")
 	ErrFailedToRotate         = fmt.Errorf("failed to rotate")
 	ErrFailedToMerge          = fmt.Errorf("failed to merge")
+	ErrInvalidFileExtension   = fmt.Errorf("invalid file extension")
 )

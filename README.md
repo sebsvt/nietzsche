@@ -12,7 +12,7 @@ These are the tools that it supports.
 | Adding page number | PDF   | pdfcpu      | golang lib             |
 | Adding Watermark   | PDF   | pdfcpu      | golang lib             |
 | PDF OCR            | PDF   | ocrmypdf    | command                |
-| PDF to JPG         | PDF   | pdftoppm    | command                |
+| PDF to JPG         | PDF   | go-fitz     | golang lib             |
 | JPG to PDF         | PDF   | gopdf       | golang lib             |
 | Unlock             | PDF   | pdfcpu      | golang lib             |
 | Protect PDF        | PDF   | pdfcpu      | golang lib             |
