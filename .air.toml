@@ -1,0 +1,16 @@
+# Config for Air (live reload tool for Go)
+
+# Directory to watch for changes
+root = "."
+
+# Ignore files or directories (optional)
+exclude_dir = ["vendor", "tmp", "logs"]
+
+# Command to build and run the app
+cmd = "go run main.go"
+
+# Set delay before restarting (milliseconds)
+delay = 500
+
+# Watch for file changes in the project
+watch_dirs = ["."]

@@ -1,30 +1,12 @@
 version: "3.8"
 
 services:
-  redis:
-    container_name: redis
-    image: redis:latest
-    volumes:
-      - redis-data:/data
+  app:
+    build: .
+    container_name: nietzsche
     ports:
-      - "6379:6379"
-    restart: always
-
-  worker:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      - REDIS_HOST=redis
+      - "8080:8080" # Adjust based on your app
     volumes:
-      - redis-data:/data
-    depends_on:
-      - redis
-    deploy:
-      replicas: 4
-    ports:
-      - "8080:8080"
-    restart: always
-
-volumes:
-  redis-data:
+      - .:/app # Syncs local files with the container
+    working_dir: /app
+    command: ["air", "-c", ".air.toml"]

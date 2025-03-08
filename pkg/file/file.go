@@ -1,6 +1,9 @@
 package file
 
 import (
+	"errors"
+	"io"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -86,4 +89,41 @@ func IsValidExtension(filename string, extensions []string) bool {
 		}
 	}
 	return false
+}
+
+type FileResponse struct {
+	Name      string
+	Content   []byte
+	Size      int64
+	Extension string
+}
+
+func GetFileFromURL(url string) (*FileResponse, error) {
+	// validate url
+	if !strings.HasPrefix(url, "http") {
+		return nil, errors.New("invalid url")
+	}
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	content, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// check if content is a pdf or image
+	if !IsValidExtension(filepath.Base(url), []string{"pdf", "jpg", "jpeg", "png", "gif"}) {
+		return nil, errors.New("invalid file type")
+	}
+
+	return &FileResponse{
+		Name:      filepath.Base(url),
+		Content:   content,
+		Size:      int64(len(content)),
+		Extension: filepath.Ext(url),
+	}, nil
 }

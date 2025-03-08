@@ -56,4 +56,5 @@ var (
 	ErrFailedToCreateZip         = fmt.Errorf("failed to create zip")
 	ErrFailedToCreateTempDir     = fmt.Errorf("failed to create temp dir")
 	ErrFailedToReadDir           = fmt.Errorf("failed to read directory")
+	ErrTextEmpty                 = fmt.Errorf("text is empty")
 )
